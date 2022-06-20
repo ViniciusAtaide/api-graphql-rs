@@ -1,0 +1,21 @@
+[package]
+name = "api-graphql-rs"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix = "0.13.0"
+actix-web = "4"
+actix-web-lab = "0.16.1"
+actix-cors = "0.6"
+async-graphql = { version = "4.0.0", features = ["dataloader" ]}
+async-graphql-actix-web = "4.0.0"
+env_logger = "0.9"
+derive_more = "0.99.2"
+sqlx = { version = "0.5", features = [ "runtime-actix-rustls", "postgres" ] }
+log = "0.4"
+dotenv = "0.15.0"
+serde = { version = "1.0.104", features = ["derive"] }
+slab = "0.4.2"

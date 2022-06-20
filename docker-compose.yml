@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  api-graphql-rs:
+    container_name: api-graphql-rs
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: $PASS_DB
+    ports:
+      - 5432:5432
