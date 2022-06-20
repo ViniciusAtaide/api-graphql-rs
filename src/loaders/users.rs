@@ -35,7 +35,6 @@ impl Loader<i32> for UserLoader {
 
     let mut m: HashMap<i32, User> = HashMap::new();
 
-    println!("{:?}", users);
     for u in users {
       m.insert(u.id, u);
     }

@@ -1,8 +1,8 @@
 use async_graphql::{Context, Object, Result};
-use sqlx::{Pool, Postgres};
 
 use crate::models::todo::Todo;
 use crate::models::user::User;
+use crate::AppContext;
 
 pub struct MutationRoot;
 
@@ -14,7 +14,7 @@ impl MutationRoot {
     title: String,
     user_id: i32,
   ) -> Result<Todo> {
-    let pool = ctx.data::<Pool<Postgres>>().unwrap();
+    let pool = ctx.data_unchecked::<AppContext>().pool.clone();
 
     let created_todo = sqlx::query_as!(
       Todo,
@@ -22,20 +22,20 @@ impl MutationRoot {
       title,
       user_id
     )
-    .fetch_one(pool)
+    .fetch_one(&pool)
     .await?;
 
     Ok(created_todo)
   }
   async fn create_user<'ctx>(&self, ctx: &Context<'ctx>, username: String) -> Result<User> {
-    let pool = ctx.data::<Pool<Postgres>>().unwrap();
+    let pool = ctx.data_unchecked::<AppContext>().pool.clone();
 
     let created_user = sqlx::query_as!(
       User,
       "INSERT INTO Users(username) VALUES ($1) RETURNING *",
       username
     )
-    .fetch_one(pool)
+    .fetch_one(&pool)
     .await?;
 
     Ok(created_user)
