@@ -39,13 +39,7 @@ pub struct AppContext {
 }
 
 impl AppContext {
-  pub async fn new() -> Self {
-    let pool = PgPool::connect(&env::var("DATABASE_URL").unwrap())
-      .await
-      .unwrap();
-
-    let user_loader = DataLoader::new(UserLoader::new(pool.clone()), actix_web::rt::spawn);
-
+  pub fn new(pool: Pool<Postgres>, user_loader: DataLoader<UserLoader>) -> Self {
     return Self { pool, user_loader };
   }
 }
@@ -56,8 +50,14 @@ async fn main() -> std::io::Result<()> {
   env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
   let server_port = env::var("SERVER_PORT").unwrap().to_owned();
 
+  let pool = PgPool::connect(&env::var("DATABASE_URL").unwrap())
+    .await
+    .unwrap();
+
+  let user_loader = DataLoader::new(UserLoader::new(pool.clone()), actix_web::rt::spawn);
+
   let schema = Schema::build(RootQuery::default(), MutationRoot, EmptySubscription)
-    .data(AppContext::new().await)
+    .data(AppContext::new(pool, user_loader))
     .finish();
 
   log::info!("starting HTTP server on port {}", server_port);
