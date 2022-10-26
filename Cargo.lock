@@ -370,7 +370,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "api-graphql-rs"
+name = "api_graphql_rs"
 version = "0.1.0"
 dependencies = [
  "actix",
