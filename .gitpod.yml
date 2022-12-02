@@ -1,0 +1,12 @@
+
+tasks:
+  - init: cargo build
+    command: cargo watch -x run
+  - init: deps
+    command: docker-compose up
+
+
+
+vscode:
+  extensions:
+    - vscodevim.vim
