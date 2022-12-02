@@ -1,11 +1,8 @@
 
 tasks:
-  - init: cargo install sqlx && sqlx run migrations
+  - name: cargo
+    init: cargo install sqlx && sqlx run migrations
     command: cargo watch -x run
-    before: docker-compose up
 
-
-
-vscode:
-  extensions:
-    - vscodevim.vim
+  - name: deps
+    command: docker-compose up
