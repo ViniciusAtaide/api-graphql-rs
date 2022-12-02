@@ -1,9 +1,8 @@
 
 tasks:
-  - init: cargo build
+  - init: cargo install sqlx && sqlx run migrations
     command: cargo watch -x run
-  - init: deps
-    command: docker-compose up
+    before: docker-compose up
 
 
 
