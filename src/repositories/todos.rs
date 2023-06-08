@@ -4,7 +4,7 @@ use sqlx::{Pool, Postgres};
 use crate::models::todo::Todo;
 
 pub async fn fetch_all(pool: Pool<Postgres>) -> Result<Vec<Todo>> {
-  let todos = sqlx::query_as!(Todo, "select id, title, done, user_id from Todos")
+  let todos = sqlx::query_as!(Todo, "SELECT id, title, done, user_id FROM Todos")
     .fetch_all(&pool)
     .await?;
 
