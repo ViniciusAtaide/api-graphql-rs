@@ -9,11 +9,12 @@ use async_graphql::{
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
 use dotenv::dotenv;
 use loaders::users::UserLoader;
-use sqlx::{postgres::PgPool, Pool, Postgres};
+use sqlx::{PgPool, Pool, Postgres};
 use std::env;
 
 mod loaders;
 mod models;
+mod repositories;
 mod resolvers;
 
 use resolvers::mutations::root::MutationRoot;
@@ -48,11 +49,11 @@ impl AppContext {
 async fn main() -> std::io::Result<()> {
   dotenv().ok();
   env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-  let server_port = env::var("SERVER_PORT").unwrap().to_owned();
+  let server_port = env::var("SERVER_PORT").expect("no SERVER_PORT").to_owned();
 
-  let pool = PgPool::connect(&env::var("DATABASE_URL").unwrap())
+  let pool = PgPool::connect(&env::var("DATABASE_URL").expect("no DATABASE_URL"))
     .await
-    .unwrap();
+    .expect("could not create pool");
 
   let user_loader = DataLoader::new(UserLoader::new(pool.clone()), actix_web::rt::spawn);
 
